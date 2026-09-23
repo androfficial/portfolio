@@ -4,9 +4,9 @@ export function setupMenu() {
   const menu = document.querySelector<HTMLElement>('[data-menu]');
   if (!menu || typeof menu.showPopover !== 'function') return;
 
-  const background = ['[data-header]', 'main', 'footer', '[data-back-to-top]']
-    .map((selector) => document.querySelector<HTMLElement>(selector))
-    .filter((element): element is HTMLElement => element !== null);
+  const background = Array.from(document.body.children).filter(
+    (element): element is HTMLElement => element instanceof HTMLElement && element !== menu,
+  );
   const desktop = window.matchMedia('(min-width: 64rem)');
 
   const setOpenState = (open: boolean) => {

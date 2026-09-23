@@ -33,6 +33,8 @@ function setupScrollState() {
   const root = document.documentElement;
   const header = document.querySelector<HTMLElement>('[data-header]');
   const backToTop = document.querySelector<HTMLElement>('[data-back-to-top]');
+  const progressBar = document.querySelector<HTMLElement>('[data-scroll-progress]');
+  const progressTargets = [progressBar, backToTop].filter((element): element is HTMLElement => element !== null);
   let lastY = window.scrollY;
   let frame = 0;
 
@@ -41,7 +43,8 @@ function setupScrollState() {
     const y = window.scrollY;
     const viewport = window.innerHeight;
     const scrollable = root.scrollHeight - viewport;
-    root.style.setProperty('--progress', scrollable > 0 ? Math.min(1, y / scrollable).toFixed(4) : '0');
+    const progress = scrollable > 0 ? Math.min(1, y / scrollable).toFixed(4) : '0';
+    for (const element of progressTargets) element.style.setProperty('--progress', progress);
 
     if (header) {
       header.dataset.scrolled = String(y > 24);
