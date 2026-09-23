@@ -1,4 +1,5 @@
 ---
+import ContactButton from './ContactButton.astro';
 import Icon from './Icon.astro';
 import SectionEyebrow from './SectionEyebrow.astro';
 import { contacts, profile } from '../data/profile';
@@ -25,20 +26,7 @@ const section = getSection('contact');
         {
           contacts.map((contact, index) => (
             <li>
-              <a
-                href={contact.href}
-                class:list={['btn', index === 0 ? 'btn-primary' : 'btn-ghost']}
-                target="_blank"
-                rel="me noopener noreferrer"
-                data-magnetic
-              >
-                <span class="btn-label">
-                  <Icon name={contact.id} class="size-4" />
-                  {contact.label}
-                  <span class="sr-only">, opens in a new tab</span>
-                  <Icon name="arrow-up-right" class="size-4 opacity-60" />
-                </span>
-              </a>
+              <ContactButton contact={contact} primary={index === 0} magnetic arrow />
             </li>
           ))
         }

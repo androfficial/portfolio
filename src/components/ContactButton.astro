@@ -1,0 +1,30 @@
+---
+import Icon from './Icon.astro';
+import type { ContactLink } from '../data/profile';
+
+interface Props {
+  contact: ContactLink;
+  primary?: boolean;
+  compact?: boolean;
+  magnetic?: boolean;
+  arrow?: boolean;
+  class?: string;
+}
+
+const { contact, primary = false, compact = false, magnetic = false, arrow = false, class: className } = Astro.props;
+---
+
+<a
+  href={contact.href}
+  class:list={['btn', primary ? 'btn-primary' : 'btn-ghost', compact && 'btn-compact', className]}
+  target="_blank"
+  rel="me noopener noreferrer"
+  data-magnetic={magnetic ? '' : undefined}
+>
+  <span class="btn-label">
+    <Icon name={contact.id} class="size-4" />
+    {contact.label}
+    <span class="sr-only">, opens in a new tab</span>
+    {arrow && <Icon name="arrow-up-right" class="size-4 opacity-60" />}
+  </span>
+</a>

@@ -11,19 +11,12 @@ const gradientId = `logo-${id}-stroke`;
 <svg class={className} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
   <defs>
     <linearGradient id={gradientId} x1="12" y1="18" x2="52" y2="46" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#3ad6c3"></stop>
-      <stop offset="1" stop-color="#ff7a5c"></stop>
+      <stop offset="0" class="stop-teal"></stop>
+      <stop offset="1" class="stop-coral"></stop>
     </linearGradient>
   </defs>
-  <rect
-    x="0.75"
-    y="0.75"
-    width="62.5"
-    height="62.5"
-    rx="16"
-    fill="#0f1a31"
-    stroke="rgb(168 190 228 / 0.28)"
-    stroke-width="1.5"></rect>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="16" class="fill-navy-raised stroke-mist/28" stroke-width="1.5"
+  ></rect>
   <g fill="none" stroke={`url(#${gradientId})`} stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M13 45 23 19l10 26"></path>
     <path d="M16.5 36h13"></path>

@@ -1,4 +1,5 @@
 ---
+import ContactButton from './ContactButton.astro';
 import Icon from './Icon.astro';
 import { findContact, headline, profile } from '../data/profile';
 import { heroMetrics } from '../data/work';
@@ -64,20 +65,8 @@ const toneClass = { teal: 'text-teal', coral: 'text-coral' } as const;
             <Icon name="arrow-down" class="size-4" />
           </span>
         </a>
-        <a href={linkedin.href} class="btn btn-ghost" target="_blank" rel="me noopener noreferrer" data-magnetic>
-          <span class="btn-label">
-            <Icon name="linkedin" class="size-4" />
-            LinkedIn
-            <span class="sr-only">, opens in a new tab</span>
-          </span>
-        </a>
-        <a href={github.href} class="btn btn-ghost" target="_blank" rel="me noopener noreferrer" data-magnetic>
-          <span class="btn-label">
-            <Icon name="github" class="size-4" />
-            GitHub
-            <span class="sr-only">, opens in a new tab</span>
-          </span>
-        </a>
+        <ContactButton contact={linkedin} magnetic />
+        <ContactButton contact={github} magnetic />
       </div>
     </div>
 

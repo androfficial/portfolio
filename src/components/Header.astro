@@ -1,4 +1,5 @@
 ---
+import ContactButton from './ContactButton.astro';
 import Icon from './Icon.astro';
 import LogoMark from './LogoMark.astro';
 import { contacts, findContact, profile } from '../data/profile';
@@ -35,19 +36,7 @@ const linkedin = findContact('linkedin');
     </nav>
 
     <div class="flex items-center gap-2">
-      <a
-        href={linkedin.href}
-        class="btn-compact btn hidden btn-ghost sm:inline-flex"
-        target="_blank"
-        rel="me noopener noreferrer"
-        data-magnetic
-      >
-        <span class="btn-label">
-          <Icon name="linkedin" class="size-4" />
-          LinkedIn
-          <span class="sr-only">, opens in a new tab</span>
-        </span>
-      </a>
+      <ContactButton contact={linkedin} compact magnetic class="hidden sm:inline-flex" />
       <button
         type="button"
         class="motion-toggle btn-icon btn btn-ghost"
@@ -105,13 +94,7 @@ const linkedin = findContact('linkedin');
       {
         contacts.map((contact) => (
           <li>
-            <a href={contact.href} class="btn-compact btn btn-ghost" target="_blank" rel="me noopener noreferrer">
-              <span class="btn-label">
-                <Icon name={contact.id} class="size-4" />
-                {contact.label}
-                <span class="sr-only">, opens in a new tab</span>
-              </span>
-            </a>
+            <ContactButton contact={contact} compact />
           </li>
         ))
       }
