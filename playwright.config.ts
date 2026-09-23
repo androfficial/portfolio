@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = 'http://localhost:4321/portfolio/';
+const channel = process.env.CI ? undefined : 'chrome';
 
 export default defineConfig({
   testDir: 'tests',
@@ -9,8 +10,8 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: { baseURL },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], channel: 'chrome' } },
-    { name: 'mobile', use: { ...devices['Pixel 7'], channel: 'chrome' } },
+    { name: 'desktop', use: { ...devices['Desktop Chrome'], channel } },
+    { name: 'mobile', use: { ...devices['Pixel 7'], channel } },
   ],
   webServer: {
     command: 'npm run preview -- --ignore-lock',

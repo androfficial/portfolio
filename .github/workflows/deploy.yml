@@ -37,6 +37,8 @@ jobs:
         run: npm run format:check
       - name: Build the site
         run: npm run build
+      - name: Install Chromium for the smoke tests
+        run: npx playwright install --with-deps chromium
       - name: Run smoke tests
         run: npm test
       - name: Upload the site

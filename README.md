@@ -76,7 +76,7 @@ Manual checks: keyboard only (skip link, nav, menu, Escape), macOS Reduce motion
 
 ## Deploy
 
-`.github/workflows/deploy.yml` runs on every push to `main` and on pull requests: `npm ci`, `check`, `lint`, `format:check`, `build` and the smoke tests. Only pushes to `main` upload `dist/` and publish it with `actions/deploy-pages`. The build job only reads the repository; the Pages and OIDC permissions belong to the deploy job alone. One-time setup before the first push: repository Settings → Pages → Source: GitHub Actions.
+`.github/workflows/deploy.yml` runs on every push to `main` and on pull requests: `npm ci`, `check`, `lint`, `format:check`, `build` and the smoke tests. CI installs Playwright's Chromium with its system libraries (`npx playwright install --with-deps chromium`) and runs the tests in it, so they do not depend on the Chrome that ships with the runner image; local runs use the installed Google Chrome. Only pushes to `main` upload `dist/` and publish it with `actions/deploy-pages`. The build job only reads the repository; the Pages and OIDC permissions belong to the deploy job alone. One-time setup before the first push: repository Settings → Pages → Source: GitHub Actions.
 
 Dependabot opens one grouped npm pull request and one GitHub Actions pull request a month, waits seven days after a release, and holds back the TypeScript and prettier-plugin-astro majors described in Gotchas.
 
