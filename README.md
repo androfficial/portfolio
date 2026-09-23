@@ -22,6 +22,7 @@ npm run lint       # eslint (astro, typescript-eslint, jsx-a11y)
 npm run format     # prettier --write; format:check only reports
 npm run build      # static site in dist/
 npm run preview    # serves dist/ at http://localhost:4321/portfolio/ (stop with: npx astro preview stop)
+npm test           # Playwright smoke tests against dist/ in local Chrome (build first)
 npm run assets     # re-renders public/og.jpg and the PNG favicons with local Chrome
 ```
 
@@ -58,21 +59,26 @@ npm run assets     # re-renders public/og.jpg and the PNG favicons with local Ch
 - Astro removes whitespace that contains a line break between tags. When two inline elements must be separated by a space, keep them on one line or add `{' '}` between them (see the hero headline).
 - TypeScript stays on 6.x: TypeScript 7 is the native port without the JavaScript API that `astro check` needs.
 - `prettier-plugin-astro` stays on 0.14 until `prettier-plugin-tailwindcss` supports its 1.x AST, and `package.json` overrides the stale `eslint` peer range of `eslint-plugin-jsx-a11y`, as in the studio site.
+- `astro preview` moves itself to the background when it detects an AI coding agent. The Playwright web server runs `npm run preview -- --ignore-lock`, which always stays in the foreground.
 
 ## Verification
 
 ```bash
-npm run check && npm run lint && npm run format:check && npm run build
+npm run check && npm run lint && npm run format:check && npm run build && npm test
 npm run preview
 npx lighthouse http://localhost:4321/portfolio/ --view
 npx lighthouse http://localhost:4321/portfolio/ --preset=desktop --view
 ```
 
+`tests/smoke.spec.ts` runs on a desktop and a Pixel 7 profile. It checks that the page loads without console errors, focus stays inside the open menu and returns to the menu button, case study anchors land right below the header, the pause choice survives a reload, scroll progress never restyles the root element, and the 404 page links back home.
+
 Manual checks: keyboard only (skip link, nav, menu, Escape), macOS Reduce motion, the pause button, widths from 320 px up, and a reading of every sentence against the CV.
 
 ## Deploy
 
-`.github/workflows/deploy.yml` runs on every push to `main`: `npm ci`, `check`, `lint`, `format:check`, `build`, then `actions/deploy-pages` publishes `dist/`. One-time setup before the first push: repository Settings → Pages → Source: GitHub Actions.
+`.github/workflows/deploy.yml` runs on every push to `main` and on pull requests: `npm ci`, `check`, `lint`, `format:check`, `build` and the smoke tests. Only pushes to `main` upload `dist/` and publish it with `actions/deploy-pages`. The build job only reads the repository; the Pages and OIDC permissions belong to the deploy job alone. One-time setup before the first push: repository Settings → Pages → Source: GitHub Actions.
+
+Dependabot opens one grouped npm pull request and one GitHub Actions pull request a month, waits seven days after a release, and holds back the TypeScript and prettier-plugin-astro majors described in Gotchas.
 
 `SITE_URL` (default `https://androfficial.github.io`) and `BASE_PATH` (default `/portfolio`) set the canonical and Open Graph URLs and every asset path. For a custom domain or Vercel, build with `BASE_PATH=/` and the new `SITE_URL`.
 
