@@ -1,0 +1,100 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import { contacts, education, profile } from '../data/profile';
+import { knowsAbout } from '../data/skills';
+
+interface Props {
+  title: string;
+  description: string;
+  indexable?: boolean;
+}
+
+const { title, description, indexable = true } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const site = Astro.site ?? new URL('https://androfficial.github.io');
+const canonical = new URL(Astro.url.pathname, site);
+const homeUrl = new URL(base, site);
+const ogImage = new URL(`${base}og.jpg`, site);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  url: homeUrl.href,
+  name: profile.metaTitle,
+  mainEntity: {
+    '@type': 'Person',
+    name: profile.name,
+    givenName: profile.firstName,
+    familyName: profile.lastName,
+    jobTitle: profile.role,
+    url: homeUrl.href,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: profile.city,
+      addressCountry: profile.countryCode,
+    },
+    sameAs: contacts.map((contact) => contact.href),
+    knowsAbout,
+    knowsLanguage: ['uk', 'en'],
+    alumniOf: education[0] ? { '@type': 'CollegeOrUniversity', name: education[0].school } : undefined,
+  },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    {indexable ? <link rel="canonical" href={canonical.href} /> : <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#0a1224" />
+    <meta name="color-scheme" content="dark" />
+    <script is:inline>
+      try {
+        if (localStorage.getItem('motion') === 'paused') document.documentElement.dataset.motion = 'paused';
+      } catch {}
+    </script>
+    <noscript
+      ><style>
+        [data-motion-toggle] {
+          display: none;
+        }
+      </style></noscript
+    >
+    <Font cssVariable="--font-unbounded" preload />
+    <Font cssVariable="--font-manrope" preload />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="icon" href={`${base}favicon-32.png`} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${profile.name}, ${profile.role} in ${profile.city}, ${profile.country}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
+    <meta
+      name="twitter:image:alt"
+      content={`${profile.name}, ${profile.role} in ${profile.city}, ${profile.country}`}
+    />
+    {indexable && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />}
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true"></div>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <slot />
+  </body>
+</html>

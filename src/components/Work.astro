@@ -1,0 +1,37 @@
+---
+import CaseStudy from './CaseStudy.astro';
+import FunnelVisual from './FunnelVisual.astro';
+import PosVisual from './PosVisual.astro';
+import SectionHeading from './SectionHeading.astro';
+import { caseStudies } from '../data/work';
+
+const [fabu, posbox] = caseStudies;
+---
+
+<section id="work" class="py-28 sm:py-36" aria-labelledby="work-title" tabindex="-1">
+  <div class="shell">
+    <SectionHeading
+      id="work-title"
+      index="01"
+      label="Selected work"
+      title="Two products, two very different kinds of complexity."
+      intro="Both are commercial products with private code, so the visuals here are abstract diagrams of the product flows, not screenshots."
+    />
+    <div class="mt-20 grid gap-32 sm:mt-24">
+      {
+        fabu && (
+          <CaseStudy study={fabu}>
+            <FunnelVisual slot="visual" label={fabu.visualLabel} />
+          </CaseStudy>
+        )
+      }
+      {
+        posbox && (
+          <CaseStudy study={posbox} reverse>
+            <PosVisual slot="visual" label={posbox.visualLabel} />
+          </CaseStudy>
+        )
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,124 @@
+---
+import Icon from './Icon.astro';
+import { findContact, headline, profile } from '../data/profile';
+import { fabuMetrics } from '../data/work';
+
+const linkedin = findContact('linkedin');
+const github = findContact('github');
+
+const words = headline.flatMap((part) => part.text.split(' ').map((text) => ({ text, tone: part.tone })));
+const toneClass = { teal: 'text-teal', coral: 'text-coral' } as const;
+
+const metrics = [
+  {
+    value: 5,
+    prefix: '',
+    suffix: '+',
+    tag: '',
+    label: 'years building production web apps',
+    spoken: 'More than 5 years building production web apps',
+  },
+  ...fabuMetrics.map((metric) => ({ ...metric, tag: 'FABU', spoken: `FABU: ${metric.spoken}` })),
+];
+---
+
+<section
+  id="top"
+  class="relative isolate flex min-h-svh flex-col justify-end overflow-hidden pt-36 pb-10 sm:pb-14"
+  aria-labelledby="hero-title"
+  tabindex="-1"
+  data-hero
+>
+  <div class="hero-backdrop" aria-hidden="true" data-hero-backdrop>
+    <canvas class="absolute inset-0 size-full" data-aurora></canvas>
+    <div class="hero-grid" data-hero-grid></div>
+  </div>
+
+  <div class="shell" data-hero-content>
+    <p class="flex items-center gap-3 label-mono text-ink-muted" data-hero-fade style="--delay: 0.05s">
+      <span class="h-px w-10 bg-teal" aria-hidden="true"></span>
+      {profile.role} · {profile.city}, {profile.country}
+    </p>
+
+    <h1 id="hero-title" class="hero-title mt-7 font-display">
+      {
+        words.map((word, index) => (
+          <>
+            <span class="hero-word">
+              <span class={word.tone ? toneClass[word.tone] : undefined} style={`--i: ${index}`}>
+                {word.text}
+              </span>
+            </span>
+            {index < words.length - 1 && ' '}
+          </>
+        ))
+      }
+    </h1>
+
+    <div class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end">
+      <div class="lg:col-span-6" data-hero-fade style="--delay: 0.45s">
+        <p class="max-w-xl text-lg leading-relaxed text-ink-muted sm:text-xl">{profile.lead}</p>
+        <ul class="mt-5 flex flex-wrap gap-x-2 gap-y-1 label-mono" aria-label="Main stack">
+          {
+            profile.stackLine.map((item, index) => (
+              <li>
+                {item}
+                {index < profile.stackLine.length - 1 && <span aria-hidden="true"> ·</span>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex flex-wrap gap-3 lg:col-span-6 lg:justify-end" data-hero-fade style="--delay: 0.6s">
+        <a href="#work" class="btn btn-primary" data-scroll-link data-magnetic>
+          <span class="btn-label">
+            View selected work
+            <Icon name="arrow-down" class="size-4" />
+          </span>
+        </a>
+        <a href={linkedin.href} class="btn btn-ghost" target="_blank" rel="me noopener noreferrer" data-magnetic>
+          <span class="btn-label">
+            <Icon name="linkedin" class="size-4" />
+            LinkedIn
+            <span class="sr-only">, opens in a new tab</span>
+          </span>
+        </a>
+        <a href={github.href} class="btn btn-ghost" target="_blank" rel="me noopener noreferrer" data-magnetic>
+          <span class="btn-label">
+            <Icon name="github" class="size-4" />
+            GitHub
+            <span class="sr-only">, opens in a new tab</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <ul
+      class="hero-metrics mt-14 grid grid-cols-2 gap-x-6 border-t border-line lg:grid-cols-4"
+      data-hero-fade
+      style="--delay: 0.75s"
+    >
+      {
+        metrics.map((metric) => (
+          <li class="pt-6 pb-2">
+            <p class="sr-only">{metric.spoken}</p>
+            <div aria-hidden="true">
+              <p class="metric-value">
+                <span class="text-ink-faint">{metric.prefix}</span>
+                <span class="count">
+                  <span class="invisible">{metric.value}</span>
+                  <span class="count-up" style={`--target: ${metric.value}`} />
+                </span>
+                <span class="text-teal">{metric.suffix}</span>
+              </p>
+              <p class="mt-3 max-w-[28ch] text-sm leading-snug text-ink-muted">
+                {metric.tag && <span class="mr-1.5 label-mono text-coral">{metric.tag}</span>}
+                {metric.label}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,46 @@
+---
+import Icon from './Icon.astro';
+import LogoMark from './LogoMark.astro';
+import { profile } from '../data/profile';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line py-10">
+  <div class="shell flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+    <p class="flex items-center gap-3 text-sm text-ink-faint">
+      <LogoMark id="footer" class="size-7" />
+      <span>© {year} {profile.name}</span>
+    </p>
+    <p class="text-sm text-ink-faint">Built with Astro, Tailwind CSS and GSAP.</p>
+    <a
+      href="#top"
+      class="link-sweep inline-flex items-center gap-1.5 self-start text-sm font-semibold sm:self-auto"
+      data-scroll-link
+    >
+      Back to top
+      <Icon name="arrow-up" class="size-3.5" />
+    </a>
+  </div>
+</footer>
+
+<a
+  href="#top"
+  class="back-to-top fixed right-5 bottom-5 z-40 grid size-12 place-items-center rounded-full border border-line-strong bg-navy-raised/80 backdrop-blur-md"
+  aria-label="Back to top"
+  data-back-to-top
+  data-scroll-link
+>
+  <svg class="absolute inset-0 size-full -rotate-90" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+    <circle
+      cx="24"
+      cy="24"
+      r="22.5"
+      fill="none"
+      stroke="rgb(58 214 195 / 0.9)"
+      stroke-width="1.5"
+      pathLength="1"
+      data-ring></circle>
+  </svg>
+  <Icon name="arrow-up" class="size-4" />
+</a>

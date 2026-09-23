@@ -1,0 +1,135 @@
+---
+import DateRange from './DateRange.astro';
+import Icon from './Icon.astro';
+import type { CaseStudy } from '../data/work';
+
+interface Props {
+  study: CaseStudy;
+  reverse?: boolean;
+}
+
+const { study, reverse = false } = Astro.props;
+const titleId = `case-${study.id}-title`;
+---
+
+<article
+  id={`case-${study.id}`}
+  class="grid scroll-mt-28 gap-10 lg:grid-cols-12 lg:gap-16"
+  aria-labelledby={titleId}
+  tabindex="-1"
+>
+  <div class:list={['lg:col-span-6', reverse && 'lg:order-2']}>
+    <figure class="overflow-hidden panel p-3 sm:p-5 lg:sticky lg:top-28" data-tilt data-case-visual>
+      <slot name="visual" />
+      <figcaption class="mt-3 px-2 pb-1 text-center label-mono">Illustrative diagram · not the product UI</figcaption>
+    </figure>
+  </div>
+
+  <div class:list={['lg:col-span-6', reverse && 'lg:order-1']}>
+    <div data-reveal-group>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2" data-reveal>
+        <span class="label-mono text-teal">Case {study.index}</span>
+        <span class="label-mono">{study.kind}</span>
+      </div>
+      <h3 id={titleId} class="mt-5 font-display text-5xl font-medium tracking-[-0.035em] sm:text-6xl" data-reveal>
+        {study.name}
+      </h3>
+      <p class="mt-4 max-w-xl text-xl leading-snug sm:text-2xl" data-reveal>{study.title}</p>
+      <p
+        class="mt-6 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink-muted"
+        data-reveal
+      >
+        <Icon name="lock" class="size-3.5 text-coral" />
+        Commercial product · private code
+      </p>
+      <dl class="mt-8 grid gap-4 border-y border-line py-5 sm:grid-cols-3" data-reveal>
+        <div>
+          <dt class="label-mono">Role</dt>
+          <dd class="mt-1 text-sm font-semibold">{study.role}</dd>
+        </div>
+        <div>
+          <dt class="label-mono">Company</dt>
+          <dd class="mt-1 text-sm font-semibold">{study.company}</dd>
+        </div>
+        <div>
+          <dt class="label-mono">Period</dt>
+          <dd class="mt-1 text-sm font-semibold"><DateRange period={study.period} /></dd>
+        </div>
+      </dl>
+      <p class="mt-8 text-lg leading-relaxed text-ink-muted" data-reveal>{study.context}</p>
+    </div>
+
+    <h4 class="mt-12 label-mono" data-reveal>What I built</h4>
+    <ol class="mt-5 grid gap-3" data-reveal-group>
+      {
+        study.highlights.map((highlight, index) => (
+          <li
+            class="spotlight rounded-[var(--radius-card)] border border-line bg-navy-raised/50 p-5"
+            data-reveal
+            data-spotlight
+          >
+            <div class="flex gap-4">
+              <span class="pt-0.5 font-mono text-xs text-teal" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div class="min-w-0">
+                <h5 class="font-bold text-ink">{highlight.title}</h5>
+                {highlight.text && <p class="mt-1.5 text-ink-muted">{highlight.text}</p>}
+                {highlight.items && (
+                  <ul class="mt-3 flex flex-wrap gap-2">
+                    {highlight.items.map((item) => (
+                      <li class="chip">{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    {
+      study.metrics.length > 0 && (
+        <>
+          <h4 class="mt-12 label-mono" data-reveal>
+            Results
+          </h4>
+          <ul class="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3" data-reveal-group>
+            {study.metrics.map((metric) => (
+              <li class="panel p-5" data-reveal>
+                <p class="sr-only">{metric.spoken}</p>
+                <div aria-hidden="true">
+                  <p class="metric-value metric-value-compact text-coral">
+                    <span class="text-ink-faint">{metric.prefix}</span>
+                    <span data-count={metric.value}>{metric.value}</span>
+                    {metric.suffix}
+                  </p>
+                  <p class="mt-3 text-sm leading-snug text-ink-muted">{metric.label}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+
+    {
+      study.outcome && (
+        <>
+          <h4 class="mt-12 label-mono" data-reveal>
+            Outcome
+          </h4>
+          <p class="mt-4 border-l-2 border-coral pl-5 text-lg leading-relaxed" data-reveal>
+            {study.outcome}
+          </p>
+        </>
+      )
+    }
+
+    <h4 class="mt-12 label-mono" data-reveal>Stack</h4>
+    <ul class="mt-4 flex flex-wrap gap-2" data-reveal>
+      {study.stack.map((item) => <li class="chip">{item}</li>)}
+    </ul>
+  </div>
+</article>

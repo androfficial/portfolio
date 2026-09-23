@@ -1,0 +1,32 @@
+---
+interface Props {
+  id?: string;
+  class?: string;
+}
+
+const { id = 'mark', class: className = 'size-9' } = Astro.props;
+const gradientId = `logo-${id}-stroke`;
+---
+
+<svg class={className} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id={gradientId} x1="12" y1="18" x2="52" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3ad6c3"></stop>
+      <stop offset="1" stop-color="#ff7a5c"></stop>
+    </linearGradient>
+  </defs>
+  <rect
+    x="0.75"
+    y="0.75"
+    width="62.5"
+    height="62.5"
+    rx="16"
+    fill="#0f1a31"
+    stroke="rgb(168 190 228 / 0.28)"
+    stroke-width="1.5"></rect>
+  <g fill="none" stroke={`url(#${gradientId})`} stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 45 23 19l10 26"></path>
+    <path d="M16.5 36h13"></path>
+    <path d="M38 45V19l13 26V19"></path>
+  </g>
+</svg>

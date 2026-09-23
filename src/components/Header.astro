@@ -1,0 +1,119 @@
+---
+import Icon from './Icon.astro';
+import LogoMark from './LogoMark.astro';
+import { sections } from '../data/navigation';
+import { contacts, findContact, profile } from '../data/profile';
+
+const linkedin = findContact('linkedin');
+---
+
+<div class="scroll-progress" aria-hidden="true"></div>
+
+<header class="site-header" data-header>
+  <div class="shell flex h-[4.5rem] items-center justify-between gap-3">
+    <a href="#top" class="flex items-center gap-3 rounded-full" data-scroll-link>
+      <LogoMark id="header" class="size-9 shrink-0" />
+      <span class="sr-only text-[0.95rem] font-bold tracking-tight min-[26rem]:not-sr-only">{profile.name}</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden lg:block">
+      <div class="relative rounded-full border border-line bg-navy-raised/70 p-1" data-nav>
+        <span class="nav-indicator" data-nav-indicator aria-hidden="true"></span>
+        <ul class="flex items-center">
+          {
+            sections.map((section) => (
+              <li>
+                <a href={`#${section.id}`} class="nav-link" data-nav-link={section.id} data-scroll-link>
+                  {section.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={linkedin.href}
+        class="btn-compact btn hidden btn-ghost sm:inline-flex"
+        target="_blank"
+        rel="me noopener noreferrer"
+        data-magnetic
+      >
+        <span class="btn-label">
+          <Icon name="linkedin" class="size-4" />
+          LinkedIn
+          <span class="sr-only">, opens in a new tab</span>
+        </span>
+      </a>
+      <button
+        type="button"
+        class="motion-toggle btn-icon btn btn-ghost"
+        aria-pressed="false"
+        title="Pause animations"
+        data-motion-toggle
+      >
+        <Icon name="pause" class="motion-toggle-pause size-4" />
+        <Icon name="play" class="motion-toggle-play size-4" />
+        <span class="sr-only">Pause animations</span>
+      </button>
+      <button type="button" class="btn-compact btn btn-ghost lg:hidden" popovertarget="mobile-menu">
+        <span class="btn-label">
+          Menu
+          <Icon name="menu" class="size-4" />
+        </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" class="mobile-menu" popover data-menu>
+  <div class="shell flex h-[4.5rem] shrink-0 items-center justify-between gap-3">
+    <span class="flex items-center gap-3">
+      <LogoMark id="menu" class="size-9 shrink-0" />
+      <span class="text-[0.95rem] font-bold tracking-tight">{profile.name}</span>
+    </span>
+    <button type="button" class="btn-compact btn btn-ghost" popovertarget="mobile-menu" popovertargetaction="hide">
+      <span class="btn-label">
+        Close
+        <Icon name="close" class="size-4" />
+      </span>
+    </button>
+  </div>
+  <div class="shell mt-6 flex grow flex-col justify-between gap-10">
+    <nav aria-label="Menu">
+      <ul class="flex flex-col">
+        {
+          sections.map((section, index) => (
+            <li class="border-b border-line">
+              <a
+                href={`#${section.id}`}
+                class="flex items-baseline gap-5 py-4 font-display text-[clamp(1.9rem,8vw,2.8rem)] font-medium tracking-tight"
+                data-scroll-link
+              >
+                <span class="label-mono text-teal">{String(index + 1).padStart(2, '0')}</span>
+                {section.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <ul class="flex flex-wrap gap-3">
+      {
+        contacts.map((contact) => (
+          <li>
+            <a href={contact.href} class="btn-compact btn btn-ghost" target="_blank" rel="me noopener noreferrer">
+              <span class="btn-label">
+                <Icon name={contact.id} class="size-4" />
+                {contact.label}
+                <span class="sr-only">, opens in a new tab</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>

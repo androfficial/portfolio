@@ -1,0 +1,175 @@
+---
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+
+const modules = [
+  { name: 'CHECKOUT', side: 'left', y: 130 },
+  { name: 'PAYMENTS', side: 'left', y: 280 },
+  { name: 'LOYALTY & CRM', side: 'left', y: 430 },
+  { name: 'FISCALIZATION', side: 'right', y: 130 },
+  { name: 'INVENTORY', side: 'right', y: 280 },
+  { name: 'DOCUMENTS', side: 'right', y: 430 },
+] as const;
+
+const connectors = [
+  'M152 150C170 150 168 170 186 170',
+  'M152 300H186',
+  'M152 450C170 450 168 430 186 430',
+  'M368 150C350 150 352 170 334 170',
+  'M368 300H334',
+  'M368 450C350 450 352 430 334 430',
+];
+
+const receiptEdge = `M186 86H334V470${'l-9.25 8-9.25-8'.repeat(8)}V86z`;
+
+const items = [
+  { y: 156, width: 78 },
+  { y: 176, width: 60 },
+  { y: 196, width: 88 },
+  { y: 216, width: 52 },
+  { y: 236, width: 70 },
+  { y: 256, width: 64 },
+];
+
+const fiscalPattern = ['11101', '10100', '11101', '00010', '10111'];
+const fiscalCells = fiscalPattern.flatMap((row, rowIndex) =>
+  [...row].flatMap((cell, columnIndex) => (cell === '1' ? [{ x: 200 + columnIndex * 9, y: 352 + rowIndex * 9 }] : [])),
+);
+
+const barcode = [
+  [258, 2],
+  [262, 1],
+  [265, 3],
+  [270, 1],
+  [273, 2],
+  [277, 1],
+  [280, 3],
+  [285, 2],
+  [289, 1],
+  [292, 2],
+  [296, 3],
+  [301, 1],
+  [304, 2],
+  [308, 1],
+  [311, 3],
+  [316, 1],
+  [319, 1],
+];
+---
+
+<svg class="block h-auto w-full" viewBox="0 0 520 620" role="img" aria-labelledby="posbox-visual-title" data-visual>
+  <title id="posbox-visual-title">{label}</title>
+  <defs>
+    <pattern id="posbox-dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.1" fill="rgb(168 190 228 / 0.14)"></circle>
+    </pattern>
+    <radialGradient id="posbox-halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#3ad6c3" stop-opacity="0.22"></stop>
+      <stop offset="1" stop-color="#3ad6c3" stop-opacity="0"></stop>
+    </radialGradient>
+    <linearGradient id="posbox-scan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#20b3a2" stop-opacity="0"></stop>
+      <stop offset="0.5" stop-color="#20b3a2"></stop>
+      <stop offset="1" stop-color="#20b3a2" stop-opacity="0"></stop>
+    </linearGradient>
+    <clipPath id="posbox-print">
+      <rect x="176" y="84" width="168" height="400" data-enter="print" data-enter-at="0.45"></rect>
+    </clipPath>
+  </defs>
+
+  <rect width="520" height="620" fill="url(#posbox-dots)"></rect>
+  <ellipse cx="260" cy="300" rx="210" ry="250" fill="url(#posbox-halo)"></ellipse>
+
+  <g>
+    {
+      connectors.map((path, index) => (
+        <path class="v-path" d={path} pathLength="1" data-enter="draw" data-enter-at={0.9 + index * 0.05} />
+      ))
+    }
+    {connectors.map((path) => <path class="v-flow flow-dash" d={path} data-enter="fade" data-enter-at="1.8" />)}
+  </g>
+
+  <rect
+    x="170"
+    y="78"
+    width="180"
+    height="14"
+    rx="7"
+    fill="#16233f"
+    stroke="rgb(168 190 228 / 0.28)"
+    data-enter="fade"
+    data-enter-at="0"></rect>
+
+  <g data-depth="0.15">
+    <g clip-path="url(#posbox-print)">
+      <path d={receiptEdge} fill="#e9eef6"></path>
+      <circle cx="208" cy="112" r="8" fill="#20b3a2"></circle>
+      <rect x="224" y="106" width="78" height="10" rx="5" fill="#0a1224" opacity="0.7"></rect>
+      <rect x="224" y="121" width="48" height="6" rx="3" fill="#0a1224" opacity="0.3"></rect>
+      <path d="M200 140H320" stroke="#0a1224" stroke-opacity="0.3" stroke-dasharray="4 4"></path>
+      {
+        items.map((item) => (
+          <g>
+            <rect x="200" y={item.y} width={item.width} height="8" rx="4" fill="#0a1224" opacity="0.35" />
+            <rect x="296" y={item.y} width="24" height="8" rx="4" fill="#0a1224" opacity="0.5" />
+          </g>
+        ))
+      }
+      <path d="M200 282H320" stroke="#0a1224" stroke-opacity="0.3" stroke-dasharray="4 4"></path>
+      <rect x="200" y="296" width="44" height="10" rx="5" fill="#0a1224" opacity="0.7"></rect>
+      <rect x="276" y="293" width="44" height="16" rx="5" fill="#ff5a36"></rect>
+      <rect x="200" y="322" width="54" height="16" rx="8" fill="none" stroke="#20b3a2" stroke-width="1.5"></rect>
+      <rect
+        x="260"
+        y="322"
+        width="60"
+        height="16"
+        rx="8"
+        fill="none"
+        stroke="#0a1224"
+        stroke-opacity="0.35"
+        stroke-width="1.5"></rect>
+      {
+        fiscalCells.map((cell) => (
+          <rect x={cell.x} y={cell.y} width="8" height="8" rx="1.5" fill="#0a1224" opacity="0.75" />
+        ))
+      }
+      {barcode.map(([x, width]) => <rect x={x} y="352" width={width} height="44" fill="#0a1224" opacity="0.75" />)}
+      <rect class="scan-line" x="254" y="352" width="70" height="2" rx="1" fill="url(#posbox-scan)"></rect>
+      <rect x="220" y="414" width="80" height="6" rx="3" fill="#0a1224" opacity="0.25"></rect>
+      <rect x="236" y="428" width="48" height="6" rx="3" fill="#0a1224" opacity="0.2"></rect>
+    </g>
+  </g>
+
+  {
+    (['left', 'right'] as const).map((side) => (
+      <g data-depth={side === 'left' ? '0.45' : '0.3'}>
+        {modules
+          .filter((module) => module.side === side)
+          .map((module, index) => {
+            const x = side === 'left' ? 20 : 368;
+            const order = modules.indexOf(module);
+            return (
+              <g data-enter={side === 'left' ? 'slide' : 'slide-back'} data-enter-at={0.7 + index * 0.08}>
+                <rect class="v-node" x={x} y={module.y} width="132" height="40" rx="20" />
+                <circle
+                  class="pulse-node"
+                  cx={x + 18}
+                  cy={module.y + 20}
+                  r="3.5"
+                  fill="#3ad6c3"
+                  style={`animation-delay: -${order}s`}
+                />
+                <text class="v-label" x={x + 30} y={module.y + 24}>
+                  {module.name}
+                </text>
+              </g>
+            );
+          })}
+      </g>
+    ))
+  }
+</svg>

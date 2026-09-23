@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Open Graph image</title>
+    <style>
+      @font-face {
+        font-family: 'Unbounded';
+        font-weight: 300 900;
+        src: url('../src/assets/fonts/unbounded-latin.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Manrope';
+        font-weight: 200 800;
+        src: url('../src/assets/fonts/manrope-latin.woff2') format('woff2');
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+      }
+
+      body {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(620px 420px at 8% 12%, rgb(58 214 195 / 0.26), transparent 70%),
+          radial-gradient(560px 400px at 96% 96%, rgb(255 122 92 / 0.22), transparent 70%), #0a1224;
+        color: #e8eef8;
+        font-family: 'Manrope', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgb(168 190 228 / 0.08) 1px, transparent 1px),
+          linear-gradient(to bottom, rgb(168 190 228 / 0.08) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(75% 85% at 30% 40%, #000, transparent 80%);
+      }
+
+      .orbit {
+        position: absolute;
+        right: -170px;
+        top: -40px;
+        width: 700px;
+        height: 700px;
+      }
+
+      .content {
+        position: absolute;
+        inset: 72px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .top {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .eyebrow {
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 20px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #a9b6cc;
+      }
+
+      h1 {
+        font-family: 'Unbounded', sans-serif;
+        font-size: 74px;
+        font-weight: 500;
+        letter-spacing: -0.035em;
+        line-height: 1.02;
+      }
+
+      .role {
+        margin-top: 22px;
+        font-size: 30px;
+        font-weight: 600;
+        color: #3ad6c3;
+      }
+
+      .tagline {
+        margin-top: 14px;
+        max-width: 780px;
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1.35;
+        color: #a9b6cc;
+      }
+
+      .stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .chip {
+        border: 1px solid rgb(168 190 228 / 0.26);
+        border-radius: 999px;
+        background: rgb(15 26 49 / 0.7);
+        padding: 9px 20px;
+        font-size: 21px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid"></div>
+    <svg class="orbit" viewBox="0 0 700 700" fill="none">
+      <circle cx="350" cy="350" r="330" stroke="rgb(168 190 228 / 0.12)" />
+      <circle cx="350" cy="350" r="250" stroke="rgb(168 190 228 / 0.14)" />
+      <circle cx="350" cy="350" r="170" stroke="rgb(58 214 195 / 0.35)" stroke-dasharray="3 12" />
+      <circle cx="350" cy="350" r="90" stroke="rgb(255 122 92 / 0.45)" />
+      <circle cx="120" cy="120" r="7" fill="#3ad6c3" />
+      <circle cx="522" cy="468" r="7" fill="#ff7a5c" />
+      <circle cx="350" cy="100" r="5" fill="#e8eef8" />
+    </svg>
+    <div class="content">
+      <div class="top">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <defs>
+            <linearGradient id="stroke" x1="12" y1="18" x2="52" y2="46" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#3ad6c3" />
+              <stop offset="1" stop-color="#ff7a5c" />
+            </linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="16" fill="#0f1a31" />
+          <g fill="none" stroke="url(#stroke)" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 45 23 19l10 26" />
+            <path d="M16.5 36h13" />
+            <path d="M38 45V19l13 26V19" />
+          </g>
+        </svg>
+        <span class="eyebrow">Portfolio · Kyiv, Ukraine</span>
+      </div>
+      <div>
+        <h1>Andrii Nakonechnyi</h1>
+        <p class="role">Frontend Developer · 5+ years in production</p>
+        <p class="tagline">I turn complex business logic into clear, fast interfaces.</p>
+      </div>
+      <div class="stack">
+        <span class="chip">Vue</span>
+        <span class="chip">Nuxt</span>
+        <span class="chip">React</span>
+        <span class="chip">Next.js</span>
+        <span class="chip">Angular</span>
+        <span class="chip">TypeScript</span>
+      </div>
+    </div>
+  </body>
+</html>
