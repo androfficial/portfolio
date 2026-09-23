@@ -11,6 +11,11 @@ function createFormatter(timeZone: string) {
   return null;
 }
 
+export function syncCurrentYear() {
+  const year = String(new Date().getFullYear());
+  for (const element of document.querySelectorAll<HTMLElement>('[data-current-year]')) element.textContent = year;
+}
+
 export function startLocalClock() {
   const clock = document.querySelector<HTMLElement>('[data-local-clock]');
   const time = clock?.querySelector<HTMLTimeElement>('[data-local-time]');

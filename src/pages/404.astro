@@ -3,8 +3,7 @@ import Icon from '../components/Icon.astro';
 import LogoMark from '../components/LogoMark.astro';
 import Base from '../layouts/Base.astro';
 import { profile } from '../data/profile';
-
-const home = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+import { withBase } from '../utils/url';
 ---
 
 <Base title={`Page not found · ${profile.name}`} description="This page does not exist." indexable={false}>
@@ -13,7 +12,7 @@ const home = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <p class="mt-10 label-mono text-teal">Error 404</p>
     <h1 class="section-title mt-4 font-display">This page does not exist.</h1>
     <p class="mt-5 max-w-lg text-lg text-ink-muted">The link may be old or mistyped. The portfolio is one page away.</p>
-    <a href={home} class="btn mt-10 btn-primary">
+    <a href={withBase()} class="btn mt-10 btn-primary">
       <span class="btn-label">
         Back to the portfolio
         <Icon name="arrow-up-right" class="size-4" />

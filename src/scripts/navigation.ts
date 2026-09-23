@@ -1,3 +1,4 @@
+import { menuCloseEvent } from './events';
 import { scrollToTarget } from './scroll-state';
 
 const headerHideOffset = 0.6;
@@ -22,7 +23,7 @@ function setupAnchorLinks() {
     if (!target) return;
 
     event.preventDefault();
-    document.dispatchEvent(new CustomEvent('menu:close'));
+    document.dispatchEvent(new Event(menuCloseEvent));
     const url = id === 'top' ? `${window.location.pathname}${window.location.search}` : `#${id}`;
     window.history.replaceState(null, '', url);
     scrollToTarget(target, () => target.focus({ preventScroll: true }));

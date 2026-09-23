@@ -3,6 +3,8 @@ import { Font } from 'astro:assets';
 import '../styles/global.css';
 import { contacts, education, languages, profile } from '../data/profile';
 import { knowsAbout } from '../data/skills';
+import { motionStorageKey, pausedMotion } from '../scripts/motion-toggle';
+import { withBase } from '../utils/url';
 
 interface Props {
   title: string;
@@ -11,11 +13,10 @@ interface Props {
 }
 
 const { title, description, indexable = true } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const site = Astro.site ?? new URL('https://androfficial.github.io');
-const canonical = new URL(Astro.url.pathname, site);
-const homeUrl = new URL(base, site);
-const ogImage = new URL(`${base}og.jpg`, site);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const homeUrl = new URL(withBase(), Astro.site);
+const ogImage = new URL(withBase('og.jpg'), Astro.site);
+const ogImageAlt = `${profile.name}, ${profile.role} in ${profile.city}, ${profile.country}`;
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -53,9 +54,10 @@ const structuredData = {
     {indexable ? <link rel="canonical" href={canonical.href} /> : <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#0a1224" />
     <meta name="color-scheme" content="dark" />
-    <script is:inline>
+    <script is:inline define:vars={{ motionStorageKey, pausedMotion }}>
       try {
-        if (localStorage.getItem('motion') === 'paused') document.documentElement.dataset.motion = 'paused';
+        if (localStorage.getItem(motionStorageKey) === pausedMotion)
+          document.documentElement.dataset.motion = pausedMotion;
       } catch {}
     </script>
     <noscript
@@ -67,30 +69,33 @@ const structuredData = {
     >
     <Font cssVariable="--font-unbounded" preload />
     <Font cssVariable="--font-manrope" preload />
-    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
-    <link rel="icon" href={`${base}favicon-32.png`} sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
-    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={profile.name} />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical.href} />
-    <meta property="og:image" content={ogImage.href} />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${profile.name}, ${profile.role} in ${profile.city}, ${profile.country}`} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage.href} />
-    <meta
-      name="twitter:image:alt"
-      content={`${profile.name}, ${profile.role} in ${profile.city}, ${profile.country}`}
-    />
-    {indexable && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />}
+    <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={withBase('favicon-32.png')} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={withBase('apple-touch-icon.png')} />
+    <link rel="sitemap" href={withBase('sitemap-index.xml')} />
+    {
+      indexable && (
+        <>
+          <meta property="og:type" content="website" />
+          <meta property="og:site_name" content={profile.name} />
+          <meta property="og:locale" content="en_US" />
+          <meta property="og:title" content={title} />
+          <meta property="og:description" content={description} />
+          <meta property="og:url" content={canonical.href} />
+          <meta property="og:image" content={ogImage.href} />
+          <meta property="og:image:type" content="image/jpeg" />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:alt" content={ogImageAlt} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={title} />
+          <meta name="twitter:description" content={description} />
+          <meta name="twitter:image" content={ogImage.href} />
+          <meta name="twitter:image:alt" content={ogImageAlt} />
+          <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
+        </>
+      )
+    }
   </head>
   <body>
     <div class="backdrop" aria-hidden="true"></div>

@@ -5,6 +5,7 @@ import { setupParallax } from './parallax';
 import { setupPointerMotion } from './pointer';
 import { setupReveals } from './reveal';
 import { startSmoothScroll } from './smooth-scroll';
+import { setupTimelineRail } from './timeline-rail';
 import { setupVisualEntrances } from './visuals';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -26,6 +27,7 @@ export function startMotion() {
       if (finePointer) cleanups.push(startSmoothScroll(), setupPointerMotion());
       setupReveals();
       setupParallax();
+      setupTimelineRail();
       setupVisualEntrances();
       ScrollTrigger.refresh();
 

@@ -1,28 +1,32 @@
-const storageKey = 'motion';
+import { motionToggleEvent } from './events';
+
+export const motionStorageKey = 'motion';
+export const pausedMotion = 'paused';
 
 export function isMotionPaused() {
-  return document.documentElement.dataset.motion === 'paused';
+  return document.documentElement.dataset.motion === pausedMotion;
 }
 
 export function setupMotionToggle() {
   const toggle = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
-  if (!toggle) return;
+  const label = toggle?.querySelector<HTMLElement>('[data-motion-label]');
+  if (!toggle || !label) return;
 
   const render = () => {
-    const paused = isMotionPaused();
-    toggle.setAttribute('aria-pressed', String(paused));
-    toggle.title = paused ? 'Play animations' : 'Pause animations';
+    const text = isMotionPaused() ? 'Play animations' : 'Pause animations';
+    label.textContent = text;
+    toggle.title = text;
   };
 
   toggle.addEventListener('click', () => {
     const paused = !isMotionPaused();
-    if (paused) document.documentElement.dataset.motion = 'paused';
+    if (paused) document.documentElement.dataset.motion = pausedMotion;
     else delete document.documentElement.dataset.motion;
     try {
-      localStorage.setItem(storageKey, paused ? 'paused' : 'playing');
+      localStorage.setItem(motionStorageKey, paused ? pausedMotion : 'playing');
     } catch {}
     render();
-    document.dispatchEvent(new CustomEvent('motion:toggle'));
+    document.dispatchEvent(new Event(motionToggleEvent));
   });
 
   render();

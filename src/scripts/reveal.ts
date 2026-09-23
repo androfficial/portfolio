@@ -3,16 +3,16 @@ import { SplitText } from 'gsap/SplitText';
 import { countUp } from './counters';
 import { isBelowFold } from './viewport';
 
-export function setupReveals(root: ParentNode = document) {
-  revealGroups(root);
-  revealSingles(root);
-  revealHeadings(root);
-  revealLines(root);
-  revealCounters(root);
+export function setupReveals() {
+  revealGroups();
+  revealSingles();
+  revealHeadings();
+  revealLines();
+  revealCounters();
 }
 
-function revealGroups(root: ParentNode) {
-  for (const group of root.querySelectorAll<HTMLElement>('[data-reveal-group]')) {
+function revealGroups() {
+  for (const group of document.querySelectorAll<HTMLElement>('[data-reveal-group]')) {
     if (!isBelowFold(group)) continue;
     const items = Array.from(group.querySelectorAll<HTMLElement>('[data-reveal]')).filter(
       (item) => item.parentElement?.closest('[data-reveal-group]') === group,
@@ -30,8 +30,8 @@ function revealGroups(root: ParentNode) {
   }
 }
 
-function revealSingles(root: ParentNode) {
-  const singles = Array.from(root.querySelectorAll<HTMLElement>('[data-reveal]')).filter(
+function revealSingles() {
+  const singles = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]')).filter(
     (item) => !item.parentElement?.closest('[data-reveal-group]') && isBelowFold(item),
   );
   for (const item of singles) {
@@ -46,8 +46,8 @@ function revealSingles(root: ParentNode) {
   }
 }
 
-function revealHeadings(root: ParentNode) {
-  for (const heading of root.querySelectorAll<HTMLElement>('[data-split]')) {
+function revealHeadings() {
+  for (const heading of document.querySelectorAll<HTMLElement>('[data-split]')) {
     if (!isBelowFold(heading)) continue;
     SplitText.create(heading, {
       type: 'lines',
@@ -67,8 +67,8 @@ function revealHeadings(root: ParentNode) {
   }
 }
 
-function revealLines(root: ParentNode) {
-  for (const line of root.querySelectorAll<HTMLElement>('[data-line]')) {
+function revealLines() {
+  for (const line of document.querySelectorAll<HTMLElement>('[data-line]')) {
     if (!isBelowFold(line)) continue;
     gsap.from(line, {
       scaleX: 0,
@@ -80,8 +80,8 @@ function revealLines(root: ParentNode) {
   }
 }
 
-function revealCounters(root: ParentNode) {
-  for (const counter of root.querySelectorAll<HTMLElement>('[data-count]')) {
+function revealCounters() {
+  for (const counter of document.querySelectorAll<HTMLElement>('[data-count]')) {
     if (!isBelowFold(counter)) continue;
     countUp(counter, { scrollTrigger: { trigger: counter, start: 'top 92%', once: true } });
   }

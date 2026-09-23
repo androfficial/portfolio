@@ -1,10 +1,18 @@
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import { headline, profile } from '../src/data/profile.ts';
 
 const projectRoot = new URL('../', import.meta.url);
 const fromRoot = (path) => new URL(path, projectRoot);
 const toPath = (path) => fileURLToPath(fromRoot(path));
+
+const ogText = {
+  eyebrow: `Portfolio · ${profile.city}, ${profile.country}`,
+  name: profile.name,
+  role: `${profile.role} · ${profile.years} years in production`,
+  tagline: headline.map((part) => part.text).join(' '),
+};
 
 const favicons = [
   { file: 'public/favicon-32.png', size: 32, background: 'transparent' },
@@ -32,6 +40,17 @@ const browser = await chromium.launch(launchOptions());
 try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
   await page.setContent(await inlineFonts(await readFile(fromRoot('brand/og.html'), 'utf8')), { waitUntil: 'load' });
+  for (const [field, text] of Object.entries(ogText)) {
+    await page.locator(`[data-og="${field}"]`).evaluate((element, value) => {
+      element.textContent = value;
+    }, text);
+  }
+  await page.locator('[data-og-stack]').evaluate((element, items) => {
+    const chips = items.map((item) =>
+      Object.assign(element.ownerDocument.createElement('span'), { className: 'chip', textContent: item }),
+    );
+    element.replaceChildren(...chips);
+  }, profile.stackLine);
   await page.evaluate('document.fonts.ready');
   await page.screenshot({ path: toPath('public/og.jpg'), type: 'jpeg', quality: 90 });
 

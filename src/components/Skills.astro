@@ -41,7 +41,7 @@ const section = getSection('skills');
     <div class="marquee-track">
       {
         [0, 1].map((copy) => (
-          <div class="marquee-group flex shrink-0 items-center" data-copy={copy}>
+          <div class:list={['flex shrink-0 items-center', copy === 1 && 'motion-reduce:hidden']}>
             {marqueeItems.map((item) => (
               <span class="flex items-center">
                 <span class="outline-text px-8 font-display text-[clamp(2.75rem,7vw,6rem)] leading-none font-medium tracking-tight">

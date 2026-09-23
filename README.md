@@ -25,21 +25,21 @@ npm run preview    # serves dist/ at http://localhost:4321/portfolio/ (stop with
 npm run assets     # re-renders public/og.jpg and the PNG favicons with local Chrome
 ```
 
-`npm run assets` uses `playwright-core` with the installed Google Chrome. Set `CHROME_PATH` to use another Chromium build. Run it after changing `brand/og.html` or `public/favicon.svg`.
+`npm run assets` uses `playwright-core` with the installed Google Chrome. Set `CHROME_PATH` to use another Chromium build. Run it after changing `brand/og.html`, `public/favicon.svg`, or the name, role, years, headline or stack in `src/data/profile.ts`.
 
 ## Structure
 
 - `src/pages/index.astro` assembles the sections; `src/pages/404.astro` becomes the GitHub Pages 404 for the project path.
 - `src/layouts/Base.astro` holds the head: title, description, canonical URL, Open Graph and Twitter tags, JSON-LD (`ProfilePage` with a `Person`), favicons, font preloads and the saved animation preference.
 - `src/data/` has the content: `profile.ts` (identity, years of experience, headline, contacts, education, languages), `sections.ts` (navigation order, section titles and intros), `work.ts` (FABU and Posbox cases and metrics), `experience.ts` (timeline), `strengths.ts`, `approach.ts` (working principles), `skills.ts` and the shared `types.ts`.
-- `src/components/` has one component per section plus `CaseStudy`, `FunnelVisual` and `PosVisual` (animated SVG diagrams), `SectionHeading`, `SectionEyebrow`, `ContactButton` (every LinkedIn, Telegram and GitHub link), `DateRange`, `Icon`, `LogoMark` and `Motion` (the client script entry).
-- `src/utils/` has small shared helpers such as `formatIndex`.
-- `src/scripts/main.ts` is the only eagerly loaded script (about 3 KB gzip): anchor navigation with focus management, header state, active section indicator, scroll progress, the popover menu, the animation pause toggle, spotlight cards, the Kyiv clock and the diagram loop observer. On idle it loads two chunks:
-  - `motion.ts` (GSAP, ScrollTrigger, SplitText, Lenis): scroll reveals, split headings, count-ups, parallax, diagram entrances, magnetic buttons, tilt and the proximity effect on the contact heading. It is never downloaded under `prefers-reduced-motion: reduce`.
+- `src/components/` has one component per section plus `CaseStudy`, `FunnelVisual` and `PosVisual` (animated SVG diagrams), `SectionHeading`, `SectionEyebrow`, `ContactButton` (every LinkedIn, Telegram and GitHub link), `DateRange`, `Icon`, `LogoMark` and `ClientScripts` (the client script entry).
+- `src/utils/` has small shared helpers: `formatIndex` for the `01` style numbers and `withBase` for paths under `BASE_PATH`.
+- `src/scripts/main.ts` is the only eagerly loaded script (about 3 KB gzip): anchor navigation with focus management, header state, active section indicator, scroll progress, the popover menu, the animation pause toggle, spotlight cards, the local clock, the footer year and the diagram loop observer. On idle it loads two chunks, and if a chunk fails to load the page simply stays static:
+  - `motion.ts` (GSAP, ScrollTrigger, SplitText, Lenis): scroll reveals, split headings, count-ups, parallax, the experience timeline rail, diagram entrances, magnetic buttons, tilt and the proximity effect on the contact heading. It is never downloaded under `prefers-reduced-motion: reduce`.
   - `aurora.ts`: the WebGL background of the hero.
-- `src/styles/global.css` defines the tokens (navy, teal, coral, type, easing) with Tailwind `@theme`, the CSS-only hero intro and counters, and the few component styles that read better as CSS. The SVG diagrams and the logo take their colours from these tokens through `fill-*`, `stroke-*` and `stop-*` utilities; only `theme-color`, the favicon, `brand/og.html` and the WebGL shader repeat the hex values.
+- `src/styles/global.css` defines the tokens (navy, teal, coral, type, easing) with Tailwind `@theme`, the CSS-only hero intro and counters, and the few component styles that read better as CSS. The SVG diagrams and the logo take their colours from these tokens through `fill-*`, `stroke-*` and `stop-*` utilities; only `theme-color`, the favicon, `brand/og.html` and the WebGL shader repeat the hex values. Buttons, chips and panels are `@utility` classes, and the other component styles sit in `@layer components`, so a utility class in the markup always wins over them.
 - `src/assets/fonts/` has Unbounded and Manrope (variable woff2, latin, SIL OFL 1.1). The Astro Fonts API self-hosts them, preloads them and generates metric-matched fallbacks.
-- `brand/og.html` is the source of the 1200×630 Open Graph image; `scripts/render-assets.mjs` renders it and the favicons into `public/`.
+- `brand/og.html` is the layout of the 1200×630 Open Graph image. `scripts/render-assets.mjs` fills its text from `src/data/profile.ts` (Node 24 runs the TypeScript module directly) and renders it and the favicons into `public/`.
 
 ## Motion and accessibility
 
@@ -47,7 +47,7 @@ npm run assets     # re-renders public/og.jpg and the PNG favicons with local Ch
 - Scroll motion runs inside `gsap.matchMedia()`. Elements that are already on screen when motion starts are never hidden, so deep links and restored scroll positions do not flash.
 - Lenis smooth scrolling runs only on devices with a fine pointer; touch devices keep native scrolling. Both respect `scroll-padding-top`, so anchors land below the fixed header.
 - `prefers-reduced-motion: reduce` turns off smooth scrolling, scroll animations, parallax, loops and the pointer effects, and the WebGL background draws one static frame.
-- The header has a pause button (WCAG 2.2.2) that stops the background, the marquee and the diagram loops. The choice is saved in `localStorage` and applied before first paint.
+- The header has a pause button (WCAG 2.2.2) that stops the background, the marquee and the diagram loops. The choice is saved in `localStorage` and applied before first paint, the icon follows it from that first paint, and the button label switches between "Pause animations" and "Play animations".
 - The WebGL background starts on idle, compiles its shader asynchronously (`KHR_parallel_shader_compile`), skips devices without hardware acceleration (`failIfMajorPerformanceCaveat`), renders at half resolution and 30 fps, and pauses when off screen or in a background tab. A CSS gradient is the fallback.
 - The mobile menu is a native `popover`, so it opens without JavaScript. With JavaScript the rest of the page becomes `inert`, scrolling locks, and focus goes to the first link and back to the menu button on close.
 - The contact heading reacts to the pointer with text stroke, color and transforms only, so it never shifts layout.

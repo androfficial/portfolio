@@ -1,3 +1,4 @@
+import { menuCloseEvent } from './events';
 import { setScrollLocked } from './scroll-state';
 
 export function setupMenu() {
@@ -29,7 +30,7 @@ export function setupMenu() {
     if (menu.matches(':popover-open')) menu.hidePopover();
   };
 
-  document.addEventListener('menu:close', close);
+  document.addEventListener(menuCloseEvent, close);
   desktop.addEventListener('change', (event) => {
     if (event.matches) close();
   });

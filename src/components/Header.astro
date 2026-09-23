@@ -39,16 +39,15 @@ const linkedin = findContact('linkedin');
       <ContactButton contact={linkedin} compact magnetic class="hidden sm:inline-flex" />
       <button
         type="button"
-        class="motion-toggle btn-icon btn btn-ghost"
-        aria-pressed="false"
+        class="btn btn-icon btn-ghost motion-reduce:hidden"
         title="Pause animations"
         data-motion-toggle
       >
         <Icon name="pause" class="motion-toggle-pause size-4" />
         <Icon name="play" class="motion-toggle-play size-4" />
-        <span class="sr-only">Pause animations</span>
+        <span class="sr-only" data-motion-label>Pause animations</span>
       </button>
-      <button type="button" class="btn-compact btn btn-ghost lg:hidden" popovertarget="mobile-menu">
+      <button type="button" class="btn btn-ghost btn-compact lg:hidden" popovertarget="mobile-menu">
         <span class="btn-label">
           Menu
           <Icon name="menu" class="size-4" />
@@ -64,7 +63,7 @@ const linkedin = findContact('linkedin');
       <LogoMark id="menu" class="size-9 shrink-0" />
       <span class="text-[0.95rem] font-bold tracking-tight">{profile.name}</span>
     </span>
-    <button type="button" class="btn-compact btn btn-ghost" popovertarget="mobile-menu" popovertargetaction="hide">
+    <button type="button" class="btn btn-ghost btn-compact" popovertarget="mobile-menu" popovertargetaction="hide">
       <span class="btn-label">
         Close
         <Icon name="close" class="size-4" />

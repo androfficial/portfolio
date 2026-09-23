@@ -21,32 +21,20 @@ export function setupParallax() {
     const visual = layer.closest('[data-case-visual]') ?? layer;
     gsap.fromTo(layer, { y: depth * 36 }, { y: depth * -36, ease: 'none', scrollTrigger: scrubBetween(visual) });
   }
-
-  const timeline = document.querySelector<HTMLElement>('[data-timeline]');
-  const rail = timeline?.querySelector<HTMLElement>('[data-timeline-rail]');
-  if (timeline && rail) {
-    gsap.fromTo(
-      rail,
-      { scaleY: 0 },
-      {
-        scaleY: 1,
-        ease: 'none',
-        transformOrigin: '50% 0%',
-        scrollTrigger: { trigger: timeline, start: 'top 75%', end: 'bottom 75%', scrub: 0.4 },
-      },
-    );
-  }
 }
 
 function setupHeroParallax() {
   const hero = document.querySelector<HTMLElement>('[data-hero]');
   if (!hero) return;
 
-  const backdrop = hero.querySelector<HTMLElement>('[data-hero-backdrop]');
-  const grid = hero.querySelector<HTMLElement>('[data-hero-grid]');
-  const content = hero.querySelector<HTMLElement>('[data-hero-content]');
-
-  if (backdrop) gsap.to(backdrop, { yPercent: 24, ease: 'none', scrollTrigger: scrubBetween(hero, 'top top') });
-  if (grid) gsap.to(grid, { yPercent: -12, ease: 'none', scrollTrigger: scrubBetween(hero, 'top top') });
-  if (content) gsap.to(content, { y: -90, opacity: 0.3, ease: 'none', scrollTrigger: scrubBetween(hero, 'top top') });
+  const layers: Array<[string, gsap.TweenVars]> = [
+    ['[data-hero-backdrop]', { yPercent: 24 }],
+    ['[data-hero-grid]', { yPercent: -12 }],
+    ['[data-hero-content]', { y: -90, opacity: 0.3 }],
+  ];
+  const timeline = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: scrubBetween(hero, 'top top') });
+  for (const [selector, vars] of layers) {
+    const layer = hero.querySelector(selector);
+    if (layer) timeline.to(layer, vars, 0);
+  }
 }

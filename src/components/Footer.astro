@@ -10,7 +10,7 @@ const year = new Date().getFullYear();
   <div class="shell flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
     <p class="flex items-center gap-3 text-sm text-ink-faint">
       <LogoMark id="footer" class="size-7" />
-      <span>© {year} {profile.name}</span>
+      <span>© <span data-current-year>{year}</span> {profile.name}</span>
     </p>
     <a
       href="#top"

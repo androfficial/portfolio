@@ -1,3 +1,4 @@
+import { motionToggleEvent } from './events';
 import { isMotionPaused } from './motion-toggle';
 
 const vertexSource = `
@@ -219,7 +220,7 @@ export async function startAurora(canvas: HTMLCanvasElement) {
   sizeObserver.observe(canvas);
   window.addEventListener('pointermove', onPointerMove, { passive: true });
   document.addEventListener('visibilitychange', play);
-  document.addEventListener('motion:toggle', play);
+  document.addEventListener(motionToggleEvent, play);
   reducedMotion.addEventListener('change', play);
   canvas.addEventListener('webglcontextlost', onContextLost);
 }
