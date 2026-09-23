@@ -1,15 +1,14 @@
 ---
-import type { Period } from '../data/profile';
+import type { Period } from '../data/types';
 
 interface Props {
   period: Period;
-  class?: string;
 }
 
-const { period, class: className } = Astro.props;
+const { period } = Astro.props;
 ---
 
-<span class:list={['inline-flex items-center gap-2', className]}>
+<span class="inline-flex items-center gap-2">
   <span>{period.from}</span>
   <svg
     class="size-3.5 shrink-0 opacity-70"

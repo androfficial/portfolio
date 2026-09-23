@@ -1,7 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 import '../styles/global.css';
-import { contacts, education, profile } from '../data/profile';
+import { contacts, education, languages, profile } from '../data/profile';
 import { knowsAbout } from '../data/skills';
 
 interface Props {
@@ -36,8 +36,8 @@ const structuredData = {
     },
     sameAs: contacts.map((contact) => contact.href),
     knowsAbout,
-    knowsLanguage: ['uk', 'en'],
-    alumniOf: education[0] ? { '@type': 'CollegeOrUniversity', name: education[0].school } : undefined,
+    knowsLanguage: languages.map((language) => language.code),
+    alumniOf: { '@type': 'CollegeOrUniversity', name: education.school },
   },
 };
 ---

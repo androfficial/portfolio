@@ -1,20 +1,18 @@
 ---
 import SectionHeading from './SectionHeading.astro';
 import { principles } from '../data/approach';
+import { getSection } from '../data/sections';
+import { formatIndex } from '../utils/format';
+
+const section = getSection('approach');
 ---
 
-<section id="approach" class="py-28 sm:py-36" aria-labelledby="approach-title" tabindex="-1">
+<section id={section.id} class="py-28 sm:py-36" aria-labelledby={section.titleId} tabindex="-1">
   <div class="shell">
-    <SectionHeading
-      id="approach-title"
-      index="03"
-      label="Approach"
-      title="How I work with product teams."
-      intro="The frontend is where product decisions meet real users. These habits help me get that part right."
-    />
+    <SectionHeading section={section} />
     <ol class="mt-16">
       {
-        principles.map((principle, index) => (
+        principles.map((principle, position) => (
           <li class="relative grid gap-6 py-10 lg:grid-cols-12 lg:gap-10" data-reveal-group>
             <span class="absolute inset-x-0 top-0 h-px origin-left bg-line-strong" data-line aria-hidden="true" />
             <span
@@ -22,7 +20,7 @@ import { principles } from '../data/approach';
               aria-hidden="true"
               data-reveal
             >
-              {String(index + 1).padStart(2, '0')}
+              {formatIndex(position + 1)}
             </span>
             <div class="lg:col-span-5" data-reveal>
               <h3 class="font-display text-2xl leading-tight font-medium tracking-tight sm:text-3xl">

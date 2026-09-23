@@ -1,25 +1,26 @@
+import type { Metric, Period } from './types';
+
 export interface ContactLink {
   id: 'linkedin' | 'telegram' | 'github';
   label: string;
-  handle: string;
   href: string;
 }
 
-export interface Period {
-  from: string;
-  to: string;
+export interface Degree {
+  degree: string;
+  field: string;
+  period: Period;
 }
 
 export interface Education {
-  degree: string;
-  field: string;
   school: string;
   city: string;
-  period: Period;
+  degrees: Degree[];
 }
 
 export interface Language {
   name: string;
+  code: string;
   level: string;
 }
 
@@ -27,6 +28,9 @@ export interface HeadlinePart {
   text: string;
   tone?: 'teal' | 'coral';
 }
+
+const experienceYears = 5;
+const years = `${experienceYears}+`;
 
 export const profile = {
   name: 'Andrii Nakonechnyi',
@@ -37,13 +41,20 @@ export const profile = {
   country: 'Ukraine',
   countryCode: 'UA',
   timeZone: 'Europe/Kyiv',
-  years: '5+',
-  lead: 'Frontend Developer with 5+ years of experience in production web apps. I build checkout and payment flows, marketing funnels, and POS and retail platforms.',
+  years,
+  lead: `Frontend Developer with ${years} years of experience in production web apps. I build checkout and payment flows, marketing funnels, and POS and retail platforms.`,
   stackLine: ['Vue', 'Nuxt', 'React', 'Next.js', 'Angular', 'TypeScript'],
   metaTitle: 'Andrii Nakonechnyi · Frontend Developer',
-  metaDescription:
-    'Frontend Developer in Kyiv, 5+ years in production: checkout and payment flows, quiz funnels, POS and retail platforms. Vue, Nuxt, React, Angular.',
+  metaDescription: `Frontend Developer in Kyiv, ${years} years in production: checkout and payment flows, quiz funnels, POS and retail platforms. Vue, Nuxt, React, Angular.`,
 } as const;
+
+export const experienceMetric: Metric = {
+  value: experienceYears,
+  prefix: '',
+  suffix: '+',
+  label: 'years building production web apps',
+  spoken: `More than ${experienceYears} years building production web apps`,
+};
 
 export const headline: HeadlinePart[] = [
   { text: 'I turn complex business logic into' },
@@ -53,47 +64,32 @@ export const headline: HeadlinePart[] = [
 ];
 
 export const contacts: ContactLink[] = [
-  {
-    id: 'linkedin',
-    label: 'LinkedIn',
-    handle: 'in/andrii-nkn',
-    href: 'https://www.linkedin.com/in/andrii-nkn/',
-  },
-  {
-    id: 'telegram',
-    label: 'Telegram',
-    handle: '@MistrixOreo',
-    href: 'https://t.me/MistrixOreo',
-  },
-  {
-    id: 'github',
-    label: 'GitHub',
-    handle: 'androfficial',
-    href: 'https://github.com/androfficial',
-  },
+  { id: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/andrii-nkn/' },
+  { id: 'telegram', label: 'Telegram', href: 'https://t.me/MistrixOreo' },
+  { id: 'github', label: 'GitHub', href: 'https://github.com/androfficial' },
 ];
 
 export const languages: Language[] = [
-  { name: 'Ukrainian', level: 'Native' },
-  { name: 'English', level: 'B1, Intermediate' },
+  { name: 'Ukrainian', code: 'uk', level: 'Native' },
+  { name: 'English', code: 'en', level: 'B1, Intermediate' },
 ];
 
-export const education: Education[] = [
-  {
-    degree: 'Master of National Security',
-    field: 'Cybersecurity, State Security in Information Sphere',
-    school: 'National Academy of the Security Service of Ukraine',
-    city: 'Kyiv',
-    period: { from: '2021', to: '2023' },
-  },
-  {
-    degree: 'Bachelor of Management',
-    field: 'Management of Restricted Information Security',
-    school: 'National Academy of the Security Service of Ukraine',
-    city: 'Kyiv',
-    period: { from: '2017', to: '2021' },
-  },
-];
+export const education: Education = {
+  school: 'National Academy of the Security Service of Ukraine',
+  city: 'Kyiv',
+  degrees: [
+    {
+      degree: 'Master of National Security',
+      field: 'Cybersecurity, State Security in Information Sphere',
+      period: { from: '2021', to: '2023' },
+    },
+    {
+      degree: 'Bachelor of Management',
+      field: 'Management of Restricted Information Security',
+      period: { from: '2017', to: '2021' },
+    },
+  ],
+};
 
 export function findContact(id: ContactLink['id']): ContactLink {
   const contact = contacts.find((item) => item.id === id);

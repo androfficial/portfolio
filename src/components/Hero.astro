@@ -1,25 +1,13 @@
 ---
 import Icon from './Icon.astro';
 import { findContact, headline, profile } from '../data/profile';
-import { fabuMetrics } from '../data/work';
+import { heroMetrics } from '../data/work';
 
 const linkedin = findContact('linkedin');
 const github = findContact('github');
 
 const words = headline.flatMap((part) => part.text.split(' ').map((text) => ({ text, tone: part.tone })));
 const toneClass = { teal: 'text-teal', coral: 'text-coral' } as const;
-
-const metrics = [
-  {
-    value: 5,
-    prefix: '',
-    suffix: '+',
-    tag: '',
-    label: 'years building production web apps',
-    spoken: 'More than 5 years building production web apps',
-  },
-  ...fabuMetrics.map((metric) => ({ ...metric, tag: 'FABU', spoken: `FABU: ${metric.spoken}` })),
-];
 ---
 
 <section
@@ -99,7 +87,7 @@ const metrics = [
       style="--delay: 0.75s"
     >
       {
-        metrics.map((metric) => (
+        heroMetrics.map((metric) => (
           <li class="pt-6 pb-2">
             <p class="sr-only">{metric.spoken}</p>
             <div aria-hidden="true">

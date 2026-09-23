@@ -1,25 +1,25 @@
 ---
 import Icon from './Icon.astro';
+import SectionEyebrow from './SectionEyebrow.astro';
 import { contacts, profile } from '../data/profile';
+import { getSection } from '../data/sections';
+
+const section = getSection('contact');
 ---
 
 <section
-  id="contact"
+  id={section.id}
   class="relative isolate overflow-hidden py-32 sm:py-44"
-  aria-labelledby="contact-title"
+  aria-labelledby={section.titleId}
   tabindex="-1"
 >
   <div class="contact-glow" aria-hidden="true" data-parallax="0.25"></div>
   <div class="shell">
-    <p class="flex items-center gap-3 label-mono text-teal" data-reveal>
-      <span aria-hidden="true">06</span>
-      <span class="h-px w-8 bg-line-strong" aria-hidden="true"></span>
-      Contact
-    </p>
-    <h2 id="contact-title" class="contact-title mt-8 font-display" data-reveal data-proximity>Let’s talk.</h2>
+    <SectionEyebrow section={section} />
+    <h2 id={section.titleId} class="contact-title mt-8 font-display" data-reveal data-proximity>{section.title}</h2>
     <div class="mt-10 grid gap-10 lg:grid-cols-12 lg:items-end">
       <p class="max-w-xl text-lg leading-relaxed text-ink-muted sm:text-xl lg:col-span-6" data-reveal>
-        The quickest way to reach me is LinkedIn or Telegram. My public code is on GitHub.
+        {section.intro}
       </p>
       <ul class="flex flex-wrap gap-3 lg:col-span-6 lg:justify-end" data-reveal>
         {
@@ -47,7 +47,7 @@ import { contacts, profile } from '../data/profile';
     <p class="mt-16 flex flex-wrap items-center gap-x-3 gap-y-1 label-mono" data-reveal>
       <Icon name="pin" class="size-4 text-coral" />
       {profile.city}, {profile.country}
-      <span data-kyiv-clock hidden>· <time data-kyiv-time></time> local time</span>
+      <span data-local-clock data-time-zone={profile.timeZone} hidden>· <time data-local-time></time> local time</span>
     </p>
   </div>
 </section>

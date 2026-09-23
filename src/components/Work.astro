@@ -3,34 +3,28 @@ import CaseStudy from './CaseStudy.astro';
 import FunnelVisual from './FunnelVisual.astro';
 import PosVisual from './PosVisual.astro';
 import SectionHeading from './SectionHeading.astro';
+import type { CaseId } from '../data/experience';
+import { getSection } from '../data/sections';
 import { caseStudies } from '../data/work';
+import { formatIndex } from '../utils/format';
 
-const [fabu, posbox] = caseStudies;
+const section = getSection('work');
+const visuals = { fabu: FunnelVisual, posbox: PosVisual } satisfies Record<CaseId, unknown>;
 ---
 
-<section id="work" class="py-28 sm:py-36" aria-labelledby="work-title" tabindex="-1">
+<section id={section.id} class="py-28 sm:py-36" aria-labelledby={section.titleId} tabindex="-1">
   <div class="shell">
-    <SectionHeading
-      id="work-title"
-      index="01"
-      label="Selected work"
-      title="Two products, two very different kinds of complexity."
-      intro="Both are commercial products with private code, so the visuals here are abstract diagrams of the product flows, not screenshots."
-    />
+    <SectionHeading section={section} />
     <div class="mt-20 grid gap-32 sm:mt-24">
       {
-        fabu && (
-          <CaseStudy study={fabu}>
-            <FunnelVisual slot="visual" label={fabu.visualLabel} />
-          </CaseStudy>
-        )
-      }
-      {
-        posbox && (
-          <CaseStudy study={posbox} reverse>
-            <PosVisual slot="visual" label={posbox.visualLabel} />
-          </CaseStudy>
-        )
+        caseStudies.map((study, position) => {
+          const Visual = visuals[study.id];
+          return (
+            <CaseStudy study={study} index={formatIndex(position + 1)} reverse={position % 2 === 1}>
+              <Visual slot="visual" label={study.visualLabel} />
+            </CaseStudy>
+          );
+        })
       }
     </div>
   </div>

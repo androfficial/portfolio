@@ -63,7 +63,7 @@ export const skillGroups: SkillGroup[] = [
 
 export const marqueeItems = [
   'Vue.js',
-  'Nuxt',
+  'Nuxt.js',
   'React',
   'Next.js',
   'Remix',
@@ -81,7 +81,7 @@ export const marqueeItems = [
 export const knowsAbout = [
   'Frontend development',
   'Vue.js',
-  'Nuxt',
+  'Nuxt.js',
   'React',
   'Next.js',
   'Remix',

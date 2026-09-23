@@ -1,4 +1,4 @@
-import { startKyivClock } from './clock';
+import { startLocalClock } from './clock';
 import { setupMenu } from './menu';
 import { setupMotionToggle } from './motion-toggle';
 import { setupNavigation } from './navigation';
@@ -33,7 +33,7 @@ function loadAurora() {
 setupNavigation();
 setupMenu();
 setupMotionToggle();
-startKyivClock();
+startLocalClock();
 watchVisualLoops();
 if (finePointer.matches) setupSpotlights();
 loadAurora();

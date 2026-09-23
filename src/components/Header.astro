@@ -1,8 +1,9 @@
 ---
 import Icon from './Icon.astro';
 import LogoMark from './LogoMark.astro';
-import { sections } from '../data/navigation';
 import { contacts, findContact, profile } from '../data/profile';
+import { sections } from '../data/sections';
+import { formatIndex } from '../utils/format';
 
 const linkedin = findContact('linkedin');
 ---
@@ -85,14 +86,14 @@ const linkedin = findContact('linkedin');
     <nav aria-label="Menu">
       <ul class="flex flex-col">
         {
-          sections.map((section, index) => (
+          sections.map((section, position) => (
             <li class="border-b border-line">
               <a
                 href={`#${section.id}`}
                 class="flex items-baseline gap-5 py-4 font-display text-[clamp(1.9rem,8vw,2.8rem)] font-medium tracking-tight"
                 data-scroll-link
               >
-                <span class="label-mono text-teal">{String(index + 1).padStart(2, '0')}</span>
+                <span class="label-mono text-teal">{formatIndex(position + 1)}</span>
                 {section.label}
               </a>
             </li>

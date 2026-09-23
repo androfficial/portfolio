@@ -9,6 +9,7 @@ One-page portfolio of Andrii Nakonechnyi, Frontend Developer in Kyiv. Built with
 - Public contacts are LinkedIn, Telegram and GitHub.
 - Copy is simple English and avoids em and en dashes. Date ranges use an SVG arrow with a hidden "to" for screen readers (`DateRange.astro`).
 - All copy lives in typed modules in `src/data/`, apart from the markup.
+- Each fact is written once: section numbers follow the order in `sections.ts`, case studies take the company, role and period from `experience.ts`, and the years of experience come from `profile.ts`.
 
 ## Develop
 
@@ -30,8 +31,9 @@ npm run assets     # re-renders public/og.jpg and the PNG favicons with local Ch
 
 - `src/pages/index.astro` assembles the sections; `src/pages/404.astro` becomes the GitHub Pages 404 for the project path.
 - `src/layouts/Base.astro` holds the head: title, description, canonical URL, Open Graph and Twitter tags, JSON-LD (`ProfilePage` with a `Person`), favicons, font preloads and the saved animation preference.
-- `src/data/` has the content: `profile.ts` (identity, headline, contacts, education, languages), `work.ts` (FABU and Posbox cases and metrics), `experience.ts` (timeline), `approach.ts` (strengths and working principles), `skills.ts` and `navigation.ts`.
-- `src/components/` has one component per section plus `CaseStudy`, `FunnelVisual` and `PosVisual` (animated SVG diagrams), `SectionHeading`, `DateRange`, `Icon`, `LogoMark` and `Motion` (the client script entry).
+- `src/data/` has the content: `profile.ts` (identity, years of experience, headline, contacts, education, languages), `sections.ts` (navigation order, section titles and intros), `work.ts` (FABU and Posbox cases and metrics), `experience.ts` (timeline), `strengths.ts`, `approach.ts` (working principles), `skills.ts` and the shared `types.ts`.
+- `src/components/` has one component per section plus `CaseStudy`, `FunnelVisual` and `PosVisual` (animated SVG diagrams), `SectionHeading`, `SectionEyebrow`, `DateRange`, `Icon`, `LogoMark` and `Motion` (the client script entry).
+- `src/utils/` has small shared helpers such as `formatIndex`.
 - `src/scripts/main.ts` is the only eagerly loaded script (about 3 KB gzip): anchor navigation with focus management, header state, active section indicator, scroll progress, the popover menu, the animation pause toggle, spotlight cards, the Kyiv clock and the diagram loop observer. On idle it loads two chunks:
   - `motion.ts` (GSAP, ScrollTrigger, SplitText, Lenis): scroll reveals, split headings, count-ups, parallax, diagram entrances, magnetic buttons, tilt and the proximity effect on the contact heading. It is never downloaded under `prefers-reduced-motion: reduce`.
   - `aurora.ts`: the WebGL background of the hero.

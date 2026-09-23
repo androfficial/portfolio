@@ -1,12 +1,6 @@
-import type { Period } from './profile';
-
-export interface Metric {
-  value: number;
-  prefix: string;
-  suffix: string;
-  label: string;
-  spoken: string;
-}
+import { findCaseProject, type CaseId } from './experience';
+import { experienceMetric } from './profile';
+import type { Metric, Period } from './types';
 
 export interface Highlight {
   title: string;
@@ -14,15 +8,9 @@ export interface Highlight {
   items?: string[];
 }
 
-export interface CaseStudy {
-  id: 'fabu' | 'posbox';
-  index: string;
-  name: string;
-  kind: string;
+interface CaseContent {
+  id: CaseId;
   title: string;
-  company: string;
-  role: string;
-  period: Period;
   context: string;
   highlights: Highlight[];
   metrics: Metric[];
@@ -31,7 +19,15 @@ export interface CaseStudy {
   visualLabel: string;
 }
 
-export const fabuMetrics: Metric[] = [
+export interface CaseStudy extends CaseContent {
+  name: string;
+  kind?: string;
+  company: string;
+  role: string;
+  period: Period;
+}
+
+const fabuMetrics: Metric[] = [
   {
     value: 80,
     prefix: '',
@@ -55,16 +51,17 @@ export const fabuMetrics: Metric[] = [
   },
 ];
 
-export const caseStudies: CaseStudy[] = [
+const fabu = findCaseProject('fabu').project;
+
+export const heroMetrics: Metric[] = [
+  experienceMetric,
+  ...fabuMetrics.map((metric) => ({ ...metric, tag: fabu.name, spoken: `${fabu.name}: ${metric.spoken}` })),
+];
+
+const cases: CaseContent[] = [
   {
     id: 'fabu',
-    index: '01',
-    name: 'FABU',
-    kind: 'FemTech wellness app',
     title: 'Quiz funnels and payments for a subscription wellness app.',
-    company: 'w7g (ex SuitsMe), Genesis Tech',
-    role: 'Front-end Developer',
-    period: { from: 'Dec 2023', to: 'Oct 2025' },
     context:
       'FABU acquires users through Facebook, AppLovin and Google Ads traffic. Most of that traffic lands in the quiz platform, and the payment flows turn it into subscriptions.',
     highlights: [
@@ -92,13 +89,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     id: 'posbox',
-    index: '02',
-    name: 'Posbox',
-    kind: 'POS and retail management platform',
     title: 'Checkout, fiscalization and back office for retail teams.',
-    company: 'Checkbox Group',
-    role: 'Front-end Developer',
-    period: { from: 'Jan 2026', to: 'Present' },
     context:
       'A production POS and retail management platform. It covers sales, fiscal operations, inventory, customer management and back-office workflows.',
     highlights: [
@@ -180,3 +171,19 @@ export const caseStudies: CaseStudy[] = [
       'Abstract diagram: a printed receipt at the center, connected to checkout, fiscalization, payments, loyalty, inventory and documents modules.',
   },
 ];
+
+export const caseStudies: CaseStudy[] = cases.map((content) => {
+  const { role, project } = findCaseProject(content.id);
+  return {
+    ...content,
+    name: project.name,
+    kind: project.kind,
+    company: role.company,
+    role: role.title,
+    period: role.period,
+  };
+});
+
+export function caseAnchorId(id: CaseId) {
+  return `case-${id}`;
+}

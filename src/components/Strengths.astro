@@ -1,18 +1,15 @@
 ---
 import Icon from './Icon.astro';
 import SectionHeading from './SectionHeading.astro';
-import { strengths } from '../data/approach';
+import { getSection } from '../data/sections';
+import { strengths } from '../data/strengths';
+
+const section = getSection('strengths');
 ---
 
-<section id="strengths" class="py-28 sm:py-36" aria-labelledby="strengths-title" tabindex="-1">
+<section id={section.id} class="py-28 sm:py-36" aria-labelledby={section.titleId} tabindex="-1">
   <div class="shell">
-    <SectionHeading
-      id="strengths-title"
-      index="02"
-      label="Strengths"
-      title="Where I add the most value."
-      intro="Six things I do well, each backed by a real project from the last five years."
-    />
+    <SectionHeading section={section} />
     <ul class="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
       {
         strengths.map((strength) => (

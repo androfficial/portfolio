@@ -1,10 +1,12 @@
-import type { Period } from './profile';
+import type { Period } from './types';
+
+export type CaseId = 'fabu' | 'posbox';
 
 export interface Project {
   name: string;
   kind?: string;
   text: string;
-  caseId?: 'fabu' | 'posbox';
+  caseId?: CaseId;
   stack: string[];
 }
 
@@ -19,7 +21,7 @@ export interface Role {
 export const roles: Role[] = [
   {
     company: 'Checkbox Group',
-    title: 'Front-end Developer',
+    title: 'Frontend Developer',
     location: 'Kyiv, Ukraine',
     period: { from: 'Jan 2026', to: 'Present' },
     projects: [
@@ -34,7 +36,7 @@ export const roles: Role[] = [
   },
   {
     company: 'w7g (ex SuitsMe), Genesis Tech',
-    title: 'Front-end Developer',
+    title: 'Frontend Developer',
     location: 'Kyiv, Ukraine',
     period: { from: 'Dec 2023', to: 'Oct 2025' },
     projects: [
@@ -55,7 +57,7 @@ export const roles: Role[] = [
   },
   {
     company: 'GetWin',
-    title: 'Front-end Developer',
+    title: 'Frontend Developer',
     location: 'Kyiv, Ukraine',
     period: { from: 'Aug 2022', to: 'Nov 2023' },
     projects: [
@@ -75,15 +77,23 @@ export const roles: Role[] = [
   },
   {
     company: 'Abz.agency',
-    title: 'Front-end Developer',
+    title: 'Frontend Developer',
     location: 'Kyiv, Ukraine',
     period: { from: 'Aug 2021', to: 'Jul 2022' },
     projects: [
       {
         name: 'Agency projects',
-        text: 'Front-end architecture and standard state management across projects. Initiated component libraries and internal UI guidelines that cut development time for new projects. Built SPAs, server-rendered sites, admin panels, mobile apps and browser extensions, and improved load time, Lighthouse and PageSpeed scores.',
-        stack: ['React', 'Vue', 'Angular', 'Next.js', 'TypeScript', 'Cypress'],
+        text: 'Frontend architecture and standard state management across projects. Initiated component libraries and internal UI guidelines that cut development time for new projects. Built SPAs, server-rendered sites, admin panels, mobile apps and browser extensions, and improved load time, Lighthouse and PageSpeed scores.',
+        stack: ['React', 'Vue.js', 'Angular', 'Next.js', 'TypeScript', 'Cypress'],
       },
     ],
   },
 ];
+
+export function findCaseProject(caseId: CaseId) {
+  for (const role of roles) {
+    const project = role.projects.find((item) => item.caseId === caseId);
+    if (project) return { role, project };
+  }
+  throw new Error(`No project for case: ${caseId}`);
+}

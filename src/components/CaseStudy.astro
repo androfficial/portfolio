@@ -1,19 +1,22 @@
 ---
 import DateRange from './DateRange.astro';
 import Icon from './Icon.astro';
-import type { CaseStudy } from '../data/work';
+import { caseAnchorId, type CaseStudy } from '../data/work';
+import { formatIndex } from '../utils/format';
 
 interface Props {
   study: CaseStudy;
+  index: string;
   reverse?: boolean;
 }
 
-const { study, reverse = false } = Astro.props;
-const titleId = `case-${study.id}-title`;
+const { study, index, reverse = false } = Astro.props;
+const anchorId = caseAnchorId(study.id);
+const titleId = `${anchorId}-title`;
 ---
 
 <article
-  id={`case-${study.id}`}
+  id={anchorId}
   class="grid gap-10 lg:scroll-mt-4 lg:grid-cols-12 lg:gap-16"
   aria-labelledby={titleId}
   tabindex="-1"
@@ -28,8 +31,8 @@ const titleId = `case-${study.id}-title`;
   <div class:list={['lg:col-span-6', reverse && 'lg:order-1']}>
     <div data-reveal-group>
       <div class="flex flex-wrap items-center gap-x-4 gap-y-2" data-reveal>
-        <span class="label-mono text-teal">Case {study.index}</span>
-        <span class="label-mono">{study.kind}</span>
+        <span class="label-mono text-teal">Case {index}</span>
+        {study.kind && <span class="label-mono">{study.kind}</span>}
       </div>
       <h3 id={titleId} class="mt-5 font-display text-5xl font-medium tracking-[-0.035em] sm:text-6xl" data-reveal>
         {study.name}
@@ -62,7 +65,7 @@ const titleId = `case-${study.id}-title`;
     <h4 class="mt-12 label-mono" data-reveal>What I built</h4>
     <ol class="mt-5 grid gap-3" data-reveal-group>
       {
-        study.highlights.map((highlight, index) => (
+        study.highlights.map((highlight, position) => (
           <li
             class="spotlight rounded-[var(--radius-card)] border border-line bg-navy-raised/50 p-5"
             data-reveal
@@ -70,7 +73,7 @@ const titleId = `case-${study.id}-title`;
           >
             <div class="flex gap-4">
               <span class="pt-0.5 font-mono text-xs text-teal" aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
+                {formatIndex(position + 1)}
               </span>
               <div class="min-w-0">
                 <h5 class="font-bold text-ink">{highlight.title}</h5>

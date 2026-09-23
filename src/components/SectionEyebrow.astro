@@ -1,0 +1,15 @@
+---
+import type { SectionView } from '../data/sections';
+
+interface Props {
+  section: SectionView;
+}
+
+const { section } = Astro.props;
+---
+
+<p class="flex items-center gap-3 label-mono text-teal" data-reveal>
+  <span aria-hidden="true">{section.index}</span>
+  <span class="h-px w-8 bg-line-strong" aria-hidden="true"></span>
+  {section.eyebrow}
+</p>
